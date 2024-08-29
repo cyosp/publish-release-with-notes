@@ -1,6 +1,10 @@
 name: "Publish release with notes"
 description: "GitHub Action to publish a release with release notes"
 inputs:
+  token:
+    description: "The GitHub token"
+    required: true
+    default: ${{ github.token }}
   id:
     description: "Release identifier"
     required: true
@@ -11,5 +15,5 @@ inputs:
     description: "Release notes file path"
     required: true
 runs:
-  using: "node12"
+  using: "node20"
   main: "index.js"

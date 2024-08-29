@@ -1,12 +1,9 @@
-const {GitHub, context} = require('@actions/github');
+const github = require('@actions/github');
 const core = require('@actions/core');
 const fs = require("fs");
 
 async function run() {
     try {
-        const github = new GitHub(process.env.GITHUB_TOKEN);
-        const {owner, repo} = context.repo;
-
         const releaseId = core.getInput("id", {required: true});
         const releaseVersion = core.getInput("version", {required: true});
         const releaseNotesFilePath = core.getInput("notes", {required: true});
@@ -36,12 +33,14 @@ async function run() {
                 .replace(/\s*\n/g, '\n');
         }
 
-        await github.repos.updateRelease({
-            owner,
-            repo,
-            release_id: releaseId,
+        const {owner, repo} = github.context.repo;
+        const octokit = github.getOctokit(core.getInput('token'));
+        await octokit.request('PATCH /repos/' + owner + '/' + repo + '/releases/' + releaseId, {
             body: versionReleaseNotes,
-            draft: false
+            draft: false,
+            headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+            }
         });
     } catch (error) {
         core.setFailed(error.message);
