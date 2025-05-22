@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### 2.0.2 (2025-04-22)
+ * Undici upgrade: 5.28.5 → 5.29.0
+
 ##### 2.0.1 (2025-02-19)
  * Components upgrade
 
